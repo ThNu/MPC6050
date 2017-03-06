@@ -6,3 +6,5 @@ i2c_master.c
 
 main.c
 
+MPU6050.c
+

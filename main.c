@@ -1,18 +1,4 @@
-#ifndef F_CPU
-#define F_CPU 16000000UL
-#endif
-
-#include <avr/io.h>
-#include <util/delay.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "i2c_master.h"
-
-
-#define MPU6050_write 0b11010000
-#define MPU6050_read 0b11010001 
+#include "MPU6050.h"
 
 void init_uart(uint16_t baudrate){
 
@@ -39,56 +25,19 @@ void uart_puts(char *s){
 }
 
 
-void init_MPU6050(void){
-
-	i2c_start(MPU6050_write);
-	i2c_write(0x6B); // set pointer to CRA
-	i2c_write(0x00); // write 0x70 to CRA
-	i2c_stop();
-}
-
-
-
-
-
 int main(void){
 	char buffer[10];
-	uint16_t raw_x,raw_y,raw_z;
 
 	init_uart(9600);
 	i2c_init();
 	init_MPU6050();
 	
 	while(1){
-		long long int avgx;
-		avgx=0;
-		for(int x=0;x<10;x++){
-			i2c_start(MPU6050_write);
-			i2c_write(0x3B); // set pointer to X axis MSB
-			i2c_stop();
-
-			i2c_start(MPU6050_read);
-
-			
-			raw_x = ((uint8_t)i2c_read_ack())<<8;
-			raw_x |= i2c_read_ack();
-
-			raw_y = ((uint8_t)i2c_read_ack())<<8;
-			raw_y |= i2c_read_nack();
-
-			raw_z = ((uint8_t)i2c_read_ack())<<8;
-			raw_z |= i2c_read_ack();
-
-			i2c_stop();
-
-			avgx+=raw_x;
-		}
 		
-		avgx=avgx/10;
-		avgx-=550;
 		//avgx=(avgx*981)/795000;
 
 		//sprintf(buffer,"%f",avgx);
+		uint16_t avgx=MPU_read();
 	    itoa(avgx, buffer, 10);
 		uart_puts("x=");
 		uart_puts(buffer);

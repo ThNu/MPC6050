@@ -38,7 +38,8 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../i2c_master.c \
-../main.c
+../main.c \
+../MPU6050.c
 
 
 PREPROCESSING_SRCS += 
@@ -49,19 +50,23 @@ ASM_SRCS +=
 
 OBJS +=  \
 i2c_master.o \
-main.o
+main.o \
+MPU6050.o
 
 OBJS_AS_ARGS +=  \
 i2c_master.o \
-main.o
+main.o \
+MPU6050.o
 
 C_DEPS +=  \
 i2c_master.d \
-main.d
+main.d \
+MPU6050.d
 
 C_DEPS_AS_ARGS +=  \
 i2c_master.d \
-main.d
+main.d \
+MPU6050.d
 
 OUTPUT_FILE_PATH +=i2cOfEmbeded.elf
 
@@ -77,6 +82,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
